@@ -10,17 +10,20 @@ export class Drone {
   videoElement: HTMLVideoElement
   pc: webkitRTCPeerConnection
   track: MediaStreamTrack
-  setController: () => void
+  setController: Function
+  setLoaded: Function
   roomName: string
   drone: any
   room: any
 
-  constructor(videoElement: HTMLVideoElement, setController: () => void) {
+  constructor(videoElement: HTMLVideoElement, setController: Function, setLoaded: Function) {
     this.roomName = `observable-${window.location.hash.substring(1)}`
     this.videoElement = videoElement
     this.drone = new window['ScaleDrone']('tauc0xbyLWJcbinO')
-    this.drone.on('open', this.handleOpen)
     this.setController = setController
+    this.setLoaded = setLoaded
+
+    this.drone.on('open', this.handleOpen)
   }
 
   handleOpen = () => {
@@ -30,10 +33,13 @@ export class Drone {
 
   handleMembers = (members: any[]) => {
     if (members.length >= 3) {
-      return alert('The room is full')
+      alert('This is already too crowded! Redirecting home...')
+      window.location.href = window.location.origin
+      window.location.reload()
     }
     const isController = members.length === 2
     if (isController) this.setController()
+    this.setLoaded()
     this.startWebRtc(isController)
   }
 
