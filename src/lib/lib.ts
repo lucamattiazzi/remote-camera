@@ -77,14 +77,12 @@ export class Drone {
       this.videoElement.srcObject = stream
     }
 
-    if (!isController) {
-      navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-        stream.getTracks().forEach(track => {
-          this.track = track
-          this.pc.addTrack(track, stream)
-        })
+    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+      stream.getTracks().forEach(track => {
+        this.track = track
+        this.pc.addTrack(track, stream)
       })
-    }
+    })
 
     this.room.on('data', (message: any, client: any) => {
       if (client.id === this.drone.clientId) {
