@@ -1,3 +1,5 @@
+import { saveAs } from 'file-saver'
+
 const configuration = {
   iceServers: [
     {
@@ -100,7 +102,9 @@ export class Drone {
         this.pc.addIceCandidate(new RTCIceCandidate(message.candidate))
       } else if (message.picture) {
         const imageCapture = new window['ImageCapture'](this.track)
-        console.log('imageCapture', imageCapture)
+        imageCapture.takePhoto().then((blob: Blob) => {
+          saveAs(blob, 'picture.png')
+        })
         // const canvas = document.createElement('canvas')
         // const ctx = canvas.getContext('2d')
         // ctx.drawImage(this.videoElement, 0, 0)
