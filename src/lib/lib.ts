@@ -1,28 +1,26 @@
 import { saveAs } from 'file-saver'
 
 const configuration = {
-  iceServers: [
-    {
-      urls: 'stun:stun.l.google.com:19302', // Google's public STUN server
-    },
-  ],
+  iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
 }
 
-const constraints = { video: { facingMode: 'environment' } }
+const constraints = { video: { facingMode: 'environment', width: 640 } }
 
 export class Drone {
-  roomName: string
   videoElement: HTMLVideoElement
   pc: webkitRTCPeerConnection
+  track: MediaStreamTrack
+  setController: () => void
+  roomName: string
   drone: any
   room: any
-  track: MediaStreamTrack
 
-  constructor(videoElement: HTMLVideoElement) {
+  constructor(videoElement: HTMLVideoElement, setController: () => void) {
     this.roomName = `observable-${window.location.hash.substring(1)}`
     this.videoElement = videoElement
     this.drone = new window['ScaleDrone']('tauc0xbyLWJcbinO')
     this.drone.on('open', this.handleOpen)
+    this.setController = setController
   }
 
   handleOpen = () => {
@@ -35,6 +33,7 @@ export class Drone {
       return alert('The room is full')
     }
     const isController = members.length === 2
+    if (isController) this.setController()
     this.startWebRtc(isController)
   }
 
@@ -74,15 +73,22 @@ export class Drone {
 
     this.pc.ontrack = event => {
       const stream = event.streams[0]
-      this.videoElement.srcObject = stream
+      if (isController) {
+        this.videoElement.srcObject = stream
+      }
     }
 
+    // if (!isController) {
     navigator.mediaDevices.getUserMedia(constraints).then(stream => {
       stream.getTracks().forEach(track => {
         this.track = track
         this.pc.addTrack(track, stream)
       })
+      if (!isController) {
+        this.videoElement.srcObject = stream
+      }
     })
+    // }
 
     this.room.on('data', (message: any, client: any) => {
       if (client.id === this.drone.clientId) {
