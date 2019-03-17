@@ -8,7 +8,7 @@ const configuration = {
   ],
 }
 
-const constraints = { video: true }
+const constraints = { video: { facingMode: 'environment' } }
 
 export class Drone {
   roomName: string
@@ -34,8 +34,8 @@ export class Drone {
     if (members.length >= 3) {
       return alert('The room is full')
     }
-    const isOfferer = members.length === 2
-    this.startWebRtc(isOfferer)
+    const isController = members.length === 2
+    this.startWebRtc(isController)
   }
 
   sendMessage = (message: any) => {
@@ -58,7 +58,7 @@ export class Drone {
       .then(() => this.sendMessage({ sdp: this.pc.localDescription }))
   }
 
-  startWebRtc = (isOfferer: boolean) => {
+  startWebRtc = (isController: boolean) => {
     this.pc = new RTCPeerConnection(configuration)
     this.pc.onicecandidate = event => {
       if (event.candidate) {
@@ -66,7 +66,7 @@ export class Drone {
       }
     }
 
-    if (isOfferer) {
+    if (isController) {
       this.pc.onnegotiationneeded = () => {
         this.pc.createOffer().then(this.localDescCreated)
       }
@@ -77,12 +77,14 @@ export class Drone {
       this.videoElement.srcObject = stream
     }
 
-    navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-      stream.getTracks().forEach(track => {
-        this.track = track
-        this.pc.addTrack(track, stream)
+    if (!isController) {
+      navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+        stream.getTracks().forEach(track => {
+          this.track = track
+          this.pc.addTrack(track, stream)
+        })
       })
-    })
+    }
 
     this.room.on('data', (message: any, client: any) => {
       if (client.id === this.drone.clientId) {
@@ -103,12 +105,8 @@ export class Drone {
       } else if (message.picture) {
         const imageCapture = new window['ImageCapture'](this.track)
         imageCapture.takePhoto().then((blob: Blob) => {
-          saveAs(blob, 'picture.png')
+          saveAs(blob, `remote-picture_${Date.now()}.png`)
         })
-        // const canvas = document.createElement('canvas')
-        // const ctx = canvas.getContext('2d')
-        // ctx.drawImage(this.videoElement, 0, 0)
-        // console.log(canvas.toDataURL('image/png'))
       }
     })
   }
