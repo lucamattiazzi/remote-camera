@@ -5,6 +5,39 @@ body,
   height: 100%;
 }
 
-.bg-greenblue {
+.bg-green-blue {
   background-color: #3feee6
+}
+
+.spin-circle {
+  position: absolute;
+  width: 20vh;
+  height: 20vh;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 3px solid #cafafe;
+  animation-name: rotateH;
+  animation-duration: 4s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.dot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #fc4445;
+  left: 50%;
+  top: -10px;
+}
+
+@keyframes rotateH {
+  from {
+    transform: rotateZ(0deg)
+  }
+
+  to {
+    transform: rotateZ(360deg)
+  }
 }

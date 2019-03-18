@@ -6,7 +6,7 @@ interface Props extends InfoProps {
 }
 
 export const Info = (props: Props) => (
-  <div className="absolute top-0 left-0 w-100 h-100 bg-greenblue flex flex-column justify-center items-center f5">
+  <div className="absolute top-0 left-0 w-100 h-100 bg-green-blue flex flex-column justify-center items-center f5">
     <div
       onClick={props.toggleInfo}
       className="absolute top-1 right-1 pointer flex flex-column justify-center items-center"

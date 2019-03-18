@@ -13,3 +13,10 @@ export const copyToClipboard = (str: string) => () => {
   document.execCommand('copy')
   document.body.removeChild(el)
 }
+
+const randomWords = require('random-words')
+
+export const generateHash = (): string => {
+  const words = randomWords(3) as string[]
+  return words.join('-')
+}
