@@ -8,7 +8,6 @@ export class App extends React.Component {
   }
 
   render() {
-    console.log('rerender!')
     const hasHash = window.location.hash && window.location.hash.length > 1
     return hasHash ? <Camera /> : <Lobby />
   }

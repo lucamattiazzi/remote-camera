@@ -9,10 +9,10 @@ export const Info = (props: Props) => (
   <div className="absolute top-0 left-0 w-100 h-100 bg-green-blue flex flex-column justify-center items-center f5">
     <div
       onClick={props.toggleInfo}
-      className="absolute top-1 right-1 pointer flex flex-column justify-center items-center"
+      className="absolute bottom-3 pointer flex flex-column justify-center items-center"
     >
-      <div className="f1">❌</div>
-      <div>Close Info</div>
+      <div className="f1">👌</div>
+      <div className="f4 b">Ok, got it!</div>
     </div>
     {props.children}
   </div>
