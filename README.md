@@ -1,10 +1,13 @@
 # Remote Picture Frontend
 
-This project was bootstrapped with [AccurApp](https://github.com/accurat/accurapp).
+A simple [WebApp](https://remote-picture.netlify.com) that allows to take pictures from a device using another device as remote trigger.
+To stream data between the devices, WebRTC is used, so no info is sent to any server.
+The `ImageCapture` API is used to take a picture at max resolution from the media capture hardware of the device, instead of a frame of the videostream, to avoid losing quality.
+The picture is saved on the camera device.
 
-## Usage
-Once you installed the dependencies running `yarn`, these are the available commands:
-- `yarn start` starts a server locally
-- `yarn build` builds the project for production, ready to be deployed from the `build/` folder
+### TODO:
 
-[Read the rest of the documentation here.](https://github.com/accurat/accurapp)
+- Shutter with countdown
+- Better style
+- Control flash
+- many other stuff...
