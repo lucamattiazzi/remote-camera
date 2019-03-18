@@ -1,5 +1,6 @@
 export type InfoProps = {
   toggleInfo: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  toggleToast: (message: string) => void
 }
 
 export const copyToClipboard = (str: string) => () => {

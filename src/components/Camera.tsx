@@ -3,15 +3,24 @@ import { Drone } from '../lib/Drone'
 import { Loading } from './Loading'
 import { CameraInfo } from './CameraInfo'
 import { ControllerInfo } from './ControllerInfo'
+import { Message } from './Message'
 
 type State = {
   info: boolean
   isCamera: boolean
   loading: boolean
+  showMessage: boolean
+  messageText: string
 }
 
 export class Camera extends React.Component<{}, State> {
-  state: State = { info: true, isCamera: true, loading: true }
+  state: State = {
+    info: true,
+    isCamera: true,
+    loading: true,
+    showMessage: false,
+    messageText: '',
+  }
   video: React.RefObject<HTMLVideoElement> = React.createRef()
   drone: Drone
 
@@ -22,6 +31,10 @@ export class Camera extends React.Component<{}, State> {
   takePicture = () => this.drone.takePicture()
   setController = () => this.setState({ isCamera: false })
   setLoaded = () => this.setState({ loading: false })
+  hideMessage = () => this.setState({ showMessage: false })
+  setMessage = (messageText: string) => {
+    this.setState({ messageText, showMessage: true }, () => setTimeout(this.hideMessage, 2000))
+  }
   toggleInfo = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation()
     this.setState({ info: !this.state.info })
@@ -39,6 +52,7 @@ export class Camera extends React.Component<{}, State> {
     const InfoComponent = this.state.isCamera ? CameraInfo : ControllerInfo
     const topLeftEmoji = this.state.isCamera ? '📷' : '✋'
     const topLeftText = this.state.isCamera ? 'Camera' : 'Controller'
+    const messageClass = this.state.showMessage ? 'toasty-show' : 'toasty-hidden'
     return (
       <div className="w-100 h-100 overflow-hidden">
         <video
@@ -59,7 +73,10 @@ export class Camera extends React.Component<{}, State> {
           <div className="f1">{topLeftEmoji}</div>
           <div>{topLeftText}</div>
         </div>
-        {!this.state.loading && this.state.info && <InfoComponent toggleInfo={this.toggleInfo} />}
+        {!this.state.loading && this.state.info && (
+          <InfoComponent toggleInfo={this.toggleInfo} toggleToast={this.setMessage} />
+        )}
+        <Message text={this.state.messageText} className={messageClass} />
         {this.state.loading && <Loading />}
       </div>
     )
