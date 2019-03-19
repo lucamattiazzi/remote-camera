@@ -74,23 +74,18 @@ export class Camera extends React.Component<{}, State> {
   render() {
     const { isController, showMessage, loading, messageText, info, flash } = this.state
     const InfoComponent = isController ? ControllerInfo : CameraInfo
-    const topLeftEmoji = isController ? '✋' : '📷'
     const messageClass = showMessage ? 'toasty-show' : 'toasty-hidden'
     return (
       <div className="w-100 h-100 overflow-hidden relative">
         {!loading && (
-          <video
-            ref={this.video}
-            autoPlay={true}
-            muted={true}
-            className="w-100 h-100 pointer"
-            onClick={this.takePicture}
-          />
+          <video ref={this.video} autoPlay={true} muted={true} className="w-100 h-100 pointer" />
         )}
-        <Button onClick={this.toggleInfo} className="top-1 right-1" symbol="ℹ️" />
-        <Button className="top-1 left-1" symbol={topLeftEmoji} />
+        <Button className="top-1 right-1" symbol="ℹ️" onClick={this.toggleInfo} />
         {isController && (
-          <Button onClick={this.delayedPicture} className="bottom-1 right-1" symbol="⏱️" />
+          <>
+            <Button className="bottom-1 left-1" symbol="📷" onClick={this.takePicture} />
+            <Button className="bottom-1 right-1" symbol="⏱️" onClick={this.delayedPicture} />
+          </>
         )}
 
         {!loading && info && (
