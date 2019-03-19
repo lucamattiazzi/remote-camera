@@ -96,7 +96,7 @@ export class Drone {
         this.track = track
         this.pc.addTrack(track, stream)
       })
-      if (isController) this.emit('setTrack', stream)
+      if (!isController) this.emit('setTrack', stream)
     })
 
     this.room.on('data', (message: any, client: any) => {
