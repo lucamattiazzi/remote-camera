@@ -7,23 +7,32 @@ const configuration = {
 const constraints = { video: { facingMode: 'environment', width: 640 } }
 
 export class Drone {
-  videoElement: HTMLVideoElement
   pc: webkitRTCPeerConnection
   track: MediaStreamTrack
-  setController: Function
-  setLoaded: Function
+  subscriptions: { [key: string]: Function[] }
   roomName: string
   drone: any
   room: any
 
-  constructor(videoElement: HTMLVideoElement, setController: Function, setLoaded: Function) {
+  constructor() {
     this.roomName = `observable-${window.location.hash.substring(1)}`
-    this.videoElement = videoElement
     this.drone = new window['ScaleDrone']('tauc0xbyLWJcbinO')
-    this.setController = setController
-    this.setLoaded = setLoaded
+    this.subscriptions = {}
 
     this.drone.on('open', this.handleOpen)
+  }
+
+  on = (event: string, callback: Function) => {
+    this.subscriptions[event] = this.subscriptions[event] || []
+    this.subscriptions[event].push(callback)
+  }
+
+  emit = (event: string, payload?: any) => {
+    const subscribers = this.subscriptions[event]
+    if (!subscribers || subscribers.length === 0) return
+    for (const subscriber of subscribers) {
+      subscriber(payload)
+    }
   }
 
   handleOpen = () => {
@@ -38,8 +47,8 @@ export class Drone {
       window.location.reload()
     }
     const isController = members.length === 2
-    if (isController) this.setController()
-    this.setLoaded()
+    if (isController) this.emit('isController')
+    this.emit('isLoaded')
     this.startWebRtc(isController)
   }
 
@@ -79,22 +88,16 @@ export class Drone {
 
     this.pc.ontrack = event => {
       const stream = event.streams[0]
-      if (isController) {
-        this.videoElement.srcObject = stream
-      }
+      if (isController) this.emit('setTrack', stream)
     }
 
-    // if (!isController) {
     navigator.mediaDevices.getUserMedia(constraints).then(stream => {
       stream.getTracks().forEach(track => {
         this.track = track
         this.pc.addTrack(track, stream)
       })
-      if (!isController) {
-        this.videoElement.srcObject = stream
-      }
+      if (isController) this.emit('setTrack', stream)
     })
-    // }
 
     this.room.on('data', (message: any, client: any) => {
       if (client.id === this.drone.clientId) {

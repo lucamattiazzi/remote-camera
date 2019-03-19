@@ -4,17 +4,19 @@ import { Info } from './Info'
 
 export const CameraInfo = (props: InfoProps) => {
   const copy = () => {
-    props.toggleToast('Copied!')
     copyToClipboard(window.location.href)
+    props.toggleToast('Copied!')
   }
   return (
     <Info {...props}>
-      <div>To remote control the camera,</div>
-      <div>use another device to go to this room:</div>
-      <div className="b pv4 pointer" onClick={copy}>
-        {window.location.hash}
+      <h2>Controls</h2>
+      <div className="tc pb3 w-80">
+        To remote control the camera use another device to go to this link:{' '}
+        <div className="f4 b pv4 pointer" onClick={copy}>
+          {window.location.hash}
+        </div>
+        (click to copy the link!)
       </div>
-      <div>(click to copy the link!)</div>
     </Info>
   )
 }

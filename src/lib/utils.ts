@@ -1,9 +1,11 @@
+export type EventFunction = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+
 export type InfoProps = {
-  toggleInfo: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  toggleInfo: EventFunction
   toggleToast: (message: string) => void
 }
 
-export const copyToClipboard = (str: string) => () => {
+export const copyToClipboard = (str: string) => {
   const el = document.createElement('textarea')
   el.value = str
   el.setAttribute('readonly', '')
@@ -21,3 +23,5 @@ export const generateHash = (): string => {
   const words = randomWords(3) as string[]
   return words.join('-')
 }
+
+export const delayed = (fn: Function, delay: number) => () => setTimeout(fn, delay)

@@ -77,3 +77,32 @@ body,
     transform: rotateZ(360deg)
   }
 }
+
+.centered {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.flash {
+  animation: flash 1s linear
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0
+  }
+
+  20% {
+    opacity: 1
+  }
+
+  80% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: 0
+  }
+}
