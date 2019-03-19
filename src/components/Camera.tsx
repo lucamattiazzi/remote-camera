@@ -77,13 +77,13 @@ export class Camera extends React.Component<{}, State> {
     const topLeftEmoji = isController ? '✋' : '📷'
     const messageClass = showMessage ? 'toasty-show' : 'toasty-hidden'
     return (
-      <div className="w-100 h-100 overflow-hidden">
+      <div className="w-100 h-100 overflow-hidden relative">
         {!loading && (
           <video
             ref={this.video}
             autoPlay={true}
             muted={true}
-            className="h-100 pointer"
+            className="w-100 h-100 pointer"
             onClick={this.takePicture}
           />
         )}
@@ -97,7 +97,7 @@ export class Camera extends React.Component<{}, State> {
           <InfoComponent toggleInfo={this.toggleInfo} toggleToast={this.setMessage} />
         )}
         <Message text={messageText} className={messageClass} />
-        {this.state.countdown && <Countdown value={this.state.countdown} />}
+        {this.state.countdown !== 0 && <Countdown value={this.state.countdown} />}
         {loading && <Loading />}
         {flash && <Flash />}
       </div>
