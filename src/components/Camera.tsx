@@ -7,7 +7,7 @@ import { Message } from './Message'
 import { Button } from './Button'
 import { Countdown } from './Countdown'
 import { Flash } from './Flash'
-import { delayed } from 'src/lib/utils'
+import { delayed } from '../lib/utils'
 
 type State = {
   info: boolean
