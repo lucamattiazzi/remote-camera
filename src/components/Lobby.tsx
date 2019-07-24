@@ -1,10 +1,5 @@
 import * as React from 'react'
-import { generateHash } from '../lib/utils'
-
-const sendToHashed = () => {
-  const hash = generateHash()
-  window.location.hash = hash
-}
+import { sendToHashed } from '../lib/utils'
 
 export const Lobby = () => (
   <div className="w-100 h-100 bg-green-blue flex flex-column justify-around items-center f5">

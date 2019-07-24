@@ -6,17 +6,33 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Remote Picture Frontend</title>
-  <meta name="description" content="">
+  <title>ControlYourSelfie</title>
+  <meta name="description" content="ControlYourSelfie">
+  <meta name="theme-color" content="#3feee6">
   <link rel="manifest" href="/manifest.json">
 
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.png">
-  <script src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
 </head>
 
 <body>
+  <noscript>
+    <style>
+      .message {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 40px;
+      }
+    </style>
+    <div class="message">
+      Ehi 1974 called, you need javascript!
+    </div>
+  </noscript>
+
   <div id="root"></div>
+  <script src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
 </body>
 
 </html>
